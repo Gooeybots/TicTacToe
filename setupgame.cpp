@@ -116,6 +116,7 @@ void SetupGame()
 
 GLuint SetupSquareBuffer(const float size)
 {
+    GLuint vbo(0);
     if(size > 0.0)
     {
         std::vector<float> positions;
@@ -133,13 +134,13 @@ GLuint SetupSquareBuffer(const float size)
         // top left
         positions.push_back(0.0f);   positions.push_back(size);
 
-positions.push_back(0.0f);   positions.push_back(1.0f);
-positions.push_back(1.0f);   positions.push_back(1.0f);
-positions.push_back(1.0f);   positions.push_back(0.0f);
-positions.push_back(0.0f);   positions.push_back(1.0f);
-positions.push_back(1.0f);   positions.push_back(0.0f);
-positions.push_back(0.0f);   positions.push_back(0.0f);
-        GLuint vbo(0);
+        positions.push_back(0.0f);   positions.push_back(1.0f);
+        positions.push_back(1.0f);   positions.push_back(1.0f);
+        positions.push_back(1.0f);   positions.push_back(0.0f);
+        positions.push_back(0.0f);   positions.push_back(1.0f);
+        positions.push_back(1.0f);   positions.push_back(0.0f);
+        positions.push_back(0.0f);   positions.push_back(0.0f);
+
         glGenBuffers(1, &vbo);
         if(vbo > 0)
         {
@@ -155,10 +156,8 @@ positions.push_back(0.0f);   positions.push_back(0.0f);
         }
 
         positions.clear();
-
-        return vbo;
     }
-    return 0;
+    return vbo;
 }
 
 GLuint SetupVAOForBufferWithoutTexture(const GLuint buffer)

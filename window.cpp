@@ -28,9 +28,14 @@ bool SetupWindow(const char * title, const int width, const int height)
             else
             {
 // had to add this is as GLEW was giving me an unknown enum error(1280) :(
-                GLenum err(glGetError());
-                if(!(err == 1280 || err == GL_NO_ERROR))
-                    std::cerr << "ERROR I REPEAT ERROR: " << err << "\n";
+                for(bool empty(false);!empty;)
+                {
+                    GLenum err(glGetError());
+                    if(err == GL_NO_ERROR)
+                        empty = true;
+                    else if(err != 1280)
+                        std::cerr << "ERROR I REPEAT ERROR: " << err << "\n";
+                }
 
                 glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
                 glfwSetWindowSizeCallback(window, Resize);

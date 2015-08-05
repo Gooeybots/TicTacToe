@@ -1,0 +1,6 @@
+#ifndef MAKESQUAREBUFFER_HPP
+#define MAKESQUAREBUFFER_HPP
+
+GLuint MakeSquareBuffer();
+
+#endif // MAKESQUAREBUFFER_HPP

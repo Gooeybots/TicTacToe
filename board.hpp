@@ -3,6 +3,7 @@
 
 #include <array>
 
+/* Main game board */
 class Board
 {
 public:

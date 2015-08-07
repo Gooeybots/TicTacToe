@@ -1,6 +1,3 @@
-#include <iostream>
-#include <exception>
-#include <GLFW/glfw3.h>
 #include "window.hpp"
 #include "setupgame.hpp"
 

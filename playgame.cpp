@@ -1,6 +1,6 @@
 #define GLM_FORCE_RADIANS
 
-#include <iostream>
+#include <vector>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "board.hpp"
@@ -8,27 +8,32 @@
 #include "draw.hpp"
 #include "playgame.hpp"
 #include "winscreen.hpp"
+#include "ai.hpp"
 
-unsigned int UpdateBoard(Board &gameBoard, const unsigned int player);
+unsigned int UpdateBoard(Board &gameBoard, const unsigned int player,
+                         bool realPlayer);
 void DrawGame(const Board &gameBoard, const glm::mat4 &viewArea, const float third,
                const std::map<Game, unsigned int> &gameGLObjectMap);
 unsigned int GetBoardPosition();
 glm::ivec3 GetWindowThirdWithOffset();
 glm::vec2 GetBoardOffset(const unsigned int where, const float third);
 
-bool PlayGame(Board &gameBoard, unsigned int player, const glm::mat4 &viewArea,
-              const float playAreaSquare,
+bool PlayGame(Board &gameBoard, const bool player1, const bool player2,
+              const glm::mat4 &viewArea, const float playAreaSquare,
               const std::map<Game, unsigned int> &gameGLObjectMap)
 {
     float thirdPlayArea(playAreaSquare / 3.0f);
     int winner(0);
-    unsigned int nextPlayer(player);
+    unsigned int player(1), nextPlayer(1);
+
     bool gameFinished(false);
     while(!gameFinished && !glfwWindowShouldClose(glfwGetCurrentContext()))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         player = nextPlayer;
-        nextPlayer = UpdateBoard(gameBoard, player);
+        nextPlayer = (player == 1 ?
+                          UpdateBoard(gameBoard, player, player1) :
+                          UpdateBoard(gameBoard, player, player2));
         DrawGame(gameBoard, viewArea, thirdPlayArea, gameGLObjectMap);
 
         if(gameBoard.GetWin(winner) || gameBoard.BoardFull())
@@ -43,22 +48,34 @@ bool PlayGame(Board &gameBoard, unsigned int player, const glm::mat4 &viewArea,
     return ShowWinScreen(gameGLObjectMap, viewArea, playAreaSquare, winner);
 }
 
-unsigned int UpdateBoard(Board &gameBoard, const unsigned int player)
+unsigned int UpdateBoard(Board &gameBoard, const unsigned int player,
+                         bool realPlayer)
 {
-    static bool mouseDown(false);
-    unsigned int boardPos(GetBoardPosition()), nextPlayer(player);
-    GLFWwindow * window(glfwGetCurrentContext());
-    if(mouseDown &&
-            glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE)
+    unsigned int nextPlayer(player);
+
+    if(!realPlayer)
     {
-        mouseDown = false;
-        if(gameBoard.SetSquare(boardPos - 1, player) && boardPos > 0)
-            nextPlayer = ((player) == 1 ? 2 : 1);
+        nextPlayer = (player == 1 ? 2 : 1);
+        unsigned int boardPos(AI::Move(gameBoard.GetBoard(), player));
+        gameBoard.SetSquare(boardPos, player);
     }
-    else if(!mouseDown &&
-            glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
+    else
     {
-        mouseDown = true;
+        static bool mouseDown(false);
+        unsigned int boardPos(GetBoardPosition());
+        GLFWwindow * window(glfwGetCurrentContext());
+        if(mouseDown &&
+                glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE)
+        {
+            mouseDown = false;
+            if(gameBoard.SetSquare(boardPos - 1, player) && boardPos > 0)
+                nextPlayer = (player == 1 ? 2 : 1);
+        }
+        else if(!mouseDown &&
+                glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
+        {
+            mouseDown = true;
+        }
     }
     return nextPlayer;
 }

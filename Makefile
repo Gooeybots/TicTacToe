@@ -55,7 +55,9 @@ SOURCES       = main.cpp \
 		playgame.cpp \
 		winscreen.cpp \
 		draw.cpp \
-		mousekeyboard.cpp 
+		mousekeyboard.cpp \
+		ai.cpp \
+		playerselection.cpp 
 OBJECTS       = main.o \
 		window.o \
 		board.o \
@@ -66,7 +68,9 @@ OBJECTS       = main.o \
 		playgame.o \
 		winscreen.o \
 		draw.o \
-		mousekeyboard.o
+		mousekeyboard.o \
+		ai.o \
+		playerselection.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -130,7 +134,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		playgame.cpp \
 		winscreen.cpp \
 		draw.cpp \
-		mousekeyboard.cpp
+		mousekeyboard.cpp \
+		ai.cpp \
+		playerselection.cpp
 QMAKE_TARGET  = TicTacToe
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = TicTacToe
@@ -283,7 +289,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/TicTacToe1.0.0 || mkdir -p .tmp/TicTacToe1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/TicTacToe1.0.0/ && $(COPY_FILE) --parents window.hpp board.hpp lodepng.h loadtexture.hpp setupprogram.hpp playgame.hpp setupgame.hpp gameenums.hpp winscreen.hpp draw.hpp mousekeyboard.hpp .tmp/TicTacToe1.0.0/ && $(COPY_FILE) --parents main.cpp window.cpp board.cpp lodepng.cpp loadtexture.cpp setupprogram.cpp setupgame.cpp playgame.cpp winscreen.cpp draw.cpp mousekeyboard.cpp .tmp/TicTacToe1.0.0/ && (cd `dirname .tmp/TicTacToe1.0.0` && $(TAR) TicTacToe1.0.0.tar TicTacToe1.0.0 && $(COMPRESS) TicTacToe1.0.0.tar) && $(MOVE) `dirname .tmp/TicTacToe1.0.0`/TicTacToe1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/TicTacToe1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/TicTacToe1.0.0/ && $(COPY_FILE) --parents window.hpp board.hpp lodepng.h loadtexture.hpp setupprogram.hpp playgame.hpp setupgame.hpp gameenums.hpp winscreen.hpp draw.hpp mousekeyboard.hpp ai.hpp playerselection.hpp .tmp/TicTacToe1.0.0/ && $(COPY_FILE) --parents main.cpp window.cpp board.cpp lodepng.cpp loadtexture.cpp setupprogram.cpp setupgame.cpp playgame.cpp winscreen.cpp draw.cpp mousekeyboard.cpp ai.cpp playerselection.cpp .tmp/TicTacToe1.0.0/ && (cd `dirname .tmp/TicTacToe1.0.0` && $(TAR) TicTacToe1.0.0.tar TicTacToe1.0.0 && $(COMPRESS) TicTacToe1.0.0.tar) && $(MOVE) `dirname .tmp/TicTacToe1.0.0`/TicTacToe1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/TicTacToe1.0.0
 
 
 clean:compiler_clean 
@@ -345,7 +351,7 @@ setupgame.o: setupgame.cpp setupgame.hpp \
 		loadtexture.hpp \
 		setupprogram.hpp \
 		gameenums.hpp \
-		playgame.hpp
+		playerselection.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o setupgame.o setupgame.cpp
 
 playgame.o: playgame.cpp board.hpp \
@@ -353,7 +359,8 @@ playgame.o: playgame.cpp board.hpp \
 		draw.hpp \
 		gameenums.hpp \
 		playgame.hpp \
-		winscreen.hpp
+		winscreen.hpp \
+		ai.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o playgame.o playgame.cpp
 
 winscreen.o: winscreen.cpp gameenums.hpp \
@@ -369,6 +376,16 @@ draw.o: draw.cpp board.hpp \
 
 mousekeyboard.o: mousekeyboard.cpp mousekeyboard.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mousekeyboard.o mousekeyboard.cpp
+
+ai.o: ai.cpp ai.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ai.o ai.cpp
+
+playerselection.o: playerselection.cpp mousekeyboard.hpp \
+		draw.hpp \
+		gameenums.hpp \
+		playgame.hpp \
+		playerselection.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o playerselection.o playerselection.cpp
 
 ####### Install
 

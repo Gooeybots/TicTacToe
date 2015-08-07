@@ -18,7 +18,9 @@ SOURCES += \
     playgame.cpp \
     winscreen.cpp \
     draw.cpp \
-    mousekeyboard.cpp
+    mousekeyboard.cpp \
+    ai.cpp \
+    playerselection.cpp
 
 HEADERS += \
     window.hpp \
@@ -31,7 +33,9 @@ HEADERS += \
     gameenums.hpp \
     winscreen.hpp \
     draw.hpp \
-    mousekeyboard.hpp
+    mousekeyboard.hpp \
+    ai.hpp \
+    playerselection.hpp
 
 OTHER_FILES += \
     textured.vs \

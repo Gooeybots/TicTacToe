@@ -18,6 +18,8 @@ public:
     bool BoardFull() const;
     // returns -1 if the pos is out of bounds
     int GetSquare(const std::size_t pos) const;
+    // returns the game board
+    std::array<int, 9> GetBoard();
 private:
     std::array<int, 9> mBoard;
 };

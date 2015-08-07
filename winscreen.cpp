@@ -47,14 +47,14 @@ bool ShowWinScreen(const std::map<Game, unsigned int> &gameGLObjectMap,
         glfwSwapBuffers(glfwGetCurrentContext());
         glfwPollEvents();
     }
-    if(!BUTTONPRESSED)
+    if(BUTTONPRESSED)
     {
         glfwSetKeyCallback(glfwGetCurrentContext(), NULL);
         glfwSetMouseButtonCallback(glfwGetCurrentContext(), NULL);
         BUTTONPRESSED = false;
-        return false;
+        return PlayAgain(gameGLObjectMap, viewArea, playAreaSquare);
     }
-    return PlayAgain(gameGLObjectMap, viewArea, playAreaSquare);
+    return false;
 }
 
 bool PlayAgain(const std::map<Game, unsigned int> &gameGLObjectMap,
@@ -92,20 +92,6 @@ bool PlayAgain(const std::map<Game, unsigned int> &gameGLObjectMap,
         glfwPollEvents();
     }
     return false;
-}
-
-bool ClickedYesNo(bool down)
-{
-    bool value(false);
-
-    if(glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_1)
-            == GLFW_PRESS && !down)
-        value = true;
-    else if(glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_1)
-            == GLFW_RELEASE && down)
-        value = true;
-
-    return value;
 }
 
 unsigned int WhereOnScreen()

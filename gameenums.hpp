@@ -14,10 +14,15 @@ enum Game
     playAgainTexture,
     yesTexture,
     noTexture,
+    selectionTexture,
     boardVao,
     playerVao,
     squareVao,
     textVao,
+    pVPVao,
+    pVAiVao,
+    aiVPVao,
+    aiVAiVao,
     withTextureProgram,
     withoutTextureProgram
 };
